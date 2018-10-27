@@ -36,21 +36,21 @@ async function init () {
     // const domainCreateResult = await createDomain(EVT, apiCaller, config.public, config.domainName)
     // console.log(domainCreateResult);
 
-    await issueTokenCall();
-
-    await transferTokenCall(apiCaller, config.public, config.amazon.public);
-
-    await addMetaDataCall(apiCallerAmazon, config.amazon.public, "transfer", "amazon_validated")
-
-    await transferTokenCall(apiCallerAmazon, config.amazon.public, config.deliver.public);
-
-    const link = await createLinkCall()
-
-    await everiPassCall(link)
-
-    await addMetaDataCall(apiCaller, config.public, "videoHash", sha256(Date.now()))
-
-    await destroyTokenCall()
+    // await issueTokenCall();
+    //
+    // await transferTokenCall(apiCaller, config.public, config.amazon.public);
+    //
+    // await addMetaDataCall(apiCallerAmazon, config.amazon.public, "transfer", "amazon_validated")
+    //
+    // await transferTokenCall(apiCallerAmazon, config.amazon.public, config.deliver.public);
+    //
+    // const link = await createLinkCall()
+    //
+    // await everiPassCall(link)
+    //
+    // await addMetaDataCall(apiCaller, config.public, "videoHash", sha256(Date.now()))
+    //
+    // await destroyTokenCall()
 
     const tokens = await apiCaller.getFungibleBalance(config.public);
     console.log('fungible balances are', tokens)

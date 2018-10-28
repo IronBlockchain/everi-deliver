@@ -31,7 +31,7 @@ const reducers = combineReducers({
   routing: routerReducer
 })
 
-export const store = createStore(
+const store = createStore(
   enableBatching(reducers),
   applyMiddleware(
     thunk,
@@ -40,3 +40,5 @@ export const store = createStore(
 )
 
 export const history = syncHistoryWithStore(browserHistory, store)
+
+export {store};

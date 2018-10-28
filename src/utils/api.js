@@ -29,7 +29,7 @@ const apiCallerAmazon = EVT({
 let evtLink = EVT.EvtLink;
 const tokenName = "room" + Date.now();
 
-async function init () {
+export async function init () {
 
     let response = await apiCaller.getInfo();
     const version = response.evt_api_version
@@ -64,7 +64,7 @@ async function init () {
 
 
 
-const issueTokenCall = async () => {
+export const issueTokenCall = async () => {
     const transactionId = await issueToken(EVT, apiCaller, config.public, config.domainName, tokenName)
     console.log('issue token result is', transactionId)
     return transactionId;
@@ -108,5 +108,3 @@ const everiPassCall = async (link) => {
     return isValidate
 }
 
-
-export default init;

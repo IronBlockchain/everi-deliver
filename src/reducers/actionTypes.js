@@ -1,5 +1,7 @@
 export const user = {
-  issue: 'USER_ISSUE',
+  issueStart: 'USER_ISSUE_START',
+  issueFinish: 'USER_ISSUE_FINISH',
+  closeNotification: 'CLOSE_NOTIFICATION'
 }
 
 export const deliver = {

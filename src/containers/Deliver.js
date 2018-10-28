@@ -4,7 +4,7 @@ import {AppBar, Toolbar, Typography, Paper} from '@material-ui/core';
 import Navigation from '../components/Navigation'
 import Good from '../components/Good'
 import Grid from '@material-ui/core/Grid'
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import { Router as Router, Route, Link } from "react-router-dom";
 import {connect} from 'react-redux';
 import {deliver as actions, batchActions} from "../actions";
 import _ from 'lodash'
@@ -35,7 +35,8 @@ const Deliver = (props) => {
 export default connect(
   state => state,
   dispatch => ({
-    // onRequestClick: () => dispatch(actions.request())
-    onRequestClick: () => dispatch(batchActions(push('/about/'), actions.request()))
+    onRequestClick: () => dispatch(actions.request()),
+    // onRequestClick: () => dispatch(push('/about'))
+    // onRequestClick: () => dispatch(batchActions(push('/about'), actions.request()))
     // onRequestClick: () => _.flow(dispatch, batchActions)(push('/about/'), actions.request())
   }))(Deliver);

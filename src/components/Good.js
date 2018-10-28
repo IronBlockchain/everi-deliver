@@ -9,7 +9,7 @@ import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import goods from '../static/goods.png';
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import { Router as Router, Route, Link } from "react-router-dom";
 
 
 const styles = {

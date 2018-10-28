@@ -4,8 +4,8 @@ import './App.css';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid'
 import { withStyles } from '@material-ui/core/styles';
-import Deliver from './containers/deliver';
-import User from './containers/user';
+import Deliver from './containers/Deliver';
+import User from './containers/User';
 import init from './utils/init'
 
 const styles = theme => ({
@@ -33,7 +33,7 @@ class App extends Component {
                 <Grid container spacing={24}>
                     <Grid item xs={12} sm={6}>
                         <Paper className={classes.paper}>
-                            <Deliver/>
+                            <Deliver />
                         </Paper>
                     </Grid>
                     <Grid item xs={12} sm={6}>

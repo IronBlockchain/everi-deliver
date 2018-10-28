@@ -1,16 +1,22 @@
-const camera = {
-    init: 'CAMERA_init',
-    move: 'CAMERA_move'
+export const user = {
+  issue: 'USER_ISSUE',
 }
 
-const user = {
-    issue: 'USER_ISSUE',
+export const deliver = {
+  request: 'DELIVER_REQUEST'
 }
+
+export const amazon = {
+
+}
+
+export const batchActionsType = 'BATCH_ACTIONS'
 
 const actionTypes = {
-    camera,
-    user
+  batchActionsType,
+  user,
+  deliver,
+  amazon
 }
 
 export default actionTypes;
-export {camera, user}

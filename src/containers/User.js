@@ -3,7 +3,7 @@ import {AppBar, Toolbar, Typography, Paper} from '@material-ui/core';
 import Navigation from "../components/Navigation"
 import { Router as Router, Route, Link } from "react-router-dom";
 import Notification from '../components/Notification'
-import {issueTokenCall} from "../utils/api";
+import {issueTokenCall, transferToAmazon, destroyTokenCall} from "../utils/api";
 import {connect} from 'react-redux';
 import {user as actions} from "../actions";
 import {push} from "react-router-redux";
@@ -27,10 +27,28 @@ const User = (props) => {
         />)
       case NotificationsEnums.IS_SENDING_TOKEN:
         return(<Notification
+          message="Success issued token, now sending"
+          onClose={props.onCloseNotification}
+          variant="success"
+          disableAction={true}
+        />)
+      //wait for amazon
+      case NotificationsEnums.TRANSFER_FINISH:
+      case NotificationsEnums.NEED_VALIDATION:
+      case NotificationsEnums.IS_PROVING:
+        return(<Notification
           message="Your item Watchcat is delivered, deliver request access.."
-          actionMessage="Issue Access Token"
+          disableAction={true}
+          variant="success"
+          onClose={props.onCloseNotification}
+        />)
+      // case NotificationsEnums.PROVING_FINISH:
+      case NotificationsEnums.CRETE_ACCESS:
+        return(<Notification
+          message="Access Control Granted"
+          actionMessage="Check the Video"
           variant="info"
-          onClick={props.onIssueAccess}
+          onClick={props.openVideo}
           onClose={props.onCloseNotification}
         />)
       default:
@@ -65,6 +83,20 @@ export default connect(
       dispatch(actions.issueStart())
       await issueTokenCall();
       dispatch(actions.issueFinish())
+      await transferToAmazon();
+      dispatch(actions.transferToAmazonFinish())
+    },
+    openVideo: () => {
+      dispatch(actions.openVideo())
+      setTimeout(()=> {
+        dispatch(actions.addHash())
+      }, 15000)
+    },
+
+    destroyToken: async () => {
+      dispatch (actions.destroyToken())
+      await destroyTokenCall();
+      dispatch (actions.destroyTokenFinish())
     },
     onCloseNotification: () => dispatch(actions.closeNotification())
   }))(User);

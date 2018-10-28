@@ -8,7 +8,7 @@ import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import goods from '../static/goods.png';
+
 import { Router as Router, Route, Link } from "react-router-dom";
 
 
@@ -30,24 +30,24 @@ function MediaCard(props) {
       <CardActionArea>
         <CardMedia
           className={classes.media}
-          image={goods}
-          title="You sweet package"
+          image={props.image}
+          title={props.title}
         />
         <CardContent>
           <Typography gutterBottom variant="h5" component="h2">
-            Watchcat
+            {props.text}
           </Typography>
           <Typography component="p">
-            super easy to pack
+            {props.subText}
           </Typography>
         </CardContent>
       </CardActionArea>
       <CardActions>
-        <Button size="small" variant="contained" color="default" onClick={props.onRequestClick}>
-          Request access
+        <Button size="small" variant="contained" color="default" onClick={props.onClick}>
+          {props.clickText}
         </Button>
         <Button size="small" color="secondary">
-          Leave Message
+          {props.subClickText}
         </Button>
       </CardActions>
     </Card>
@@ -56,7 +56,12 @@ function MediaCard(props) {
 
 MediaCard.propTypes = {
   classes: PropTypes.object.isRequired,
-  onRequestClick: PropTypes.func.isRequired,
+  onClick: PropTypes.func.isRequired,
+  title: PropTypes.string.isRequired,
+  text: PropTypes.string.isRequired,
+  subText: PropTypes.string.isRequired,
+  clickText: PropTypes.string.isRequired,
+  subClickText: PropTypes.string.isRequired,
 };
 
 export default withStyles(styles)(MediaCard);

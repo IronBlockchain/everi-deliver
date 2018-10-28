@@ -30,7 +30,7 @@ const styles = theme => ({
     backgroundColor: 'amber',
   },
   icon: {
-    fontSize: 20,
+    fontSize: 15,
   },
   iconVariant: {
     opacity: 0.9,
@@ -46,6 +46,37 @@ function InfoSnackBar(props) {
   const { classes, className, variant, message, onClose, onClick, actionMessage, ...other } = props;
   const Icon = variantIcon[variant];
 
+  const createAction = () => {
+    if(props.disableAction) {
+      return [
+        <IconButton
+          key="close"
+          aria-label="Close"
+          color="inherit"
+          className={classes.close}
+          onClick={onClose}
+        >
+          <CloseIcon className={classes.icon} />
+        </IconButton>
+      ];
+    } else {
+      return [
+        <Button key="clickAction" variant="contained" color="primary" size="small" onClick={onClick}>
+          {actionMessage}
+        </Button>,
+        <IconButton
+          key="close"
+          aria-label="Close"
+          color="inherit"
+          className={classes.close}
+          onClick={onClose}
+        >
+          <CloseIcon className={classes.icon} />
+        </IconButton>
+      ]
+    }
+  }
+
   return (
     <div>
       { <SnackbarContent
@@ -57,32 +88,18 @@ function InfoSnackBar(props) {
             {message}
           </span>
         }
-        action={
-          [
-            <Button key="clickAction" variant="contained" color="primary" size="small" onClick={onClick}>
-              {actionMessage}
-            </Button>,
-            <IconButton
-              key="close"
-              aria-label="Close"
-              color="inherit"
-              className={classes.close}
-              onClick={onClose}
-            >
-              <CloseIcon className={classes.icon} />
-            </IconButton>
-          ]
-        } /> }
+        action={createAction()} /> }
     </div>
   );
 }
 
 InfoSnackBar.propTypes = {
   classes: PropTypes.object.isRequired,
-  onClick: PropTypes.func.isRequired,
+  onClick: PropTypes.func,
+  actionMessage: PropTypes.string,
+  disableAction: PropTypes.bool,
   onClose: PropTypes.func.isRequired,
   message: PropTypes.string.isRequired,
-  actionMessage: PropTypes.string.isRequired,
   variant: PropTypes.string.isRequired,
 };
 export default withStyles(styles)(InfoSnackBar);

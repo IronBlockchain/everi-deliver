@@ -63,13 +63,6 @@ export async function init () {
 }
 
 
-
-export const issueTokenCall = async () => {
-    const transactionId = await issueToken(EVT, apiCaller, config.public, config.domainName, tokenName)
-    console.log('issue token result is', transactionId)
-    return transactionId;
-}
-
 const transferTokenCall = async (caller, sender, receiver) => {
     const result = await transferToken(EVT, caller, sender, config.domainName, tokenName,
         receiver, "now message comes")
@@ -77,7 +70,7 @@ const transferTokenCall = async (caller, sender, receiver) => {
     return result;
 }
 
-const destroyTokenCall = async () => {
+export const destroyTokenCall = async () => {
     const result = await destoryToken(EVT, apiCaller, config.public, config.domainName, tokenName)
     console.log('destroy token result is', result)
     return result;
@@ -90,7 +83,7 @@ const addMetaDataCall = async (apiCaller, sender, key, value) => {
     return result;
 }
 
-const createLinkCall = async () => {
+export const createLinkCall = async () => {
     const link = await createLink(EVT, config.amazon.private, config.domainName, tokenName)
     console.log('generate link  is', link)
     return link.rawText
@@ -102,9 +95,30 @@ const createLinkQRCall = async () => {
     return data.url
 }
 
-const everiPassCall = async (link) => {
+export const everiPassCall = async (link) => {
     const isValidate = await everiPass(EVT, apiCaller, config.public, link)
     console.log('validate result is', isValidate)
     return isValidate
 }
 
+export const issueTokenCall = async () => {
+  const transactionId = await issueToken(EVT, apiCaller, config.public, config.domainName, tokenName)
+  console.log('issue token result is', transactionId)
+  return transactionId;
+}
+
+export const transferToAmazon = async () => {
+  await transferTokenCall(apiCaller, config.public, config.amazon.public)
+}
+
+export const validateToken = async () => {
+  await addMetaDataCall(apiCallerAmazon, config.amazon.public, "transfer", "amazon_validated")
+}
+
+export const transferTokenToDeliver = async () => {
+  await transferTokenCall(apiCallerAmazon, config.amazon.public, config.deliver.public);
+}
+
+export const addVideoData = async () => {
+  await addMetaDataCall(apiCaller, config.public, "videoHash", sha256(Date.now()))
+}

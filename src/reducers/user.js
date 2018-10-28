@@ -18,8 +18,24 @@ const user = (state = {
         }
     case types.user.issueFinish:
         return {...state,
-          notification: NotificationsEnums.NO_NOTIFICATION
+          notification: NotificationsEnums.TRANSFER_FINISH
         }
+    case types.user.transferToAmazonFinish:
+      return {...state,
+        notification: NotificationsEnums.NEED_VALIDATION
+      }
+    case types.user.validate:
+        return {...state,
+          notification: NotificationsEnums.IS_PROVING
+        }
+    case types.user.proveAccess:
+      return {...state,
+        notification: NotificationsEnums.PROVING_FINISH
+      }
+    case types.user.proveFinish:
+      return {...state,
+        notification: NotificationsEnums.CRETE_ACCESS
+      }
     case types.user.closeNotification:
         return {...state,
           notification: NotificationsEnums.NO_NOTIFICATION

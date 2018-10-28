@@ -1,7 +1,15 @@
 export const user = {
   issueStart: 'USER_ISSUE_START',
   issueFinish: 'USER_ISSUE_FINISH',
-  closeNotification: 'CLOSE_NOTIFICATION'
+  closeNotification: 'CLOSE_NOTIFICATION',
+  proveAccess: 'PROVE_ACCESS',
+  proveFinish: 'PROVE_FINISH',
+  validate: 'VALIDATE_REQUEST',
+  transferToAmazonFinish: 'transferToAmazonFinish',
+  openVideo: 'openVideo',
+  addHash: 'addHash',
+  destroyToken: 'destroyToken',
+  destroyTokenFinish: 'destroyTokenFinish',
 }
 
 export const deliver = {

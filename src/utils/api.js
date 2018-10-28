@@ -58,6 +58,8 @@ export async function init () {
     let ownTokens = await apiCaller.getOwnedTokens(config.public)
     console.log('token balances are', ownTokens)
 
+    // const tokenData = await apiCaller.getToken(config.domainName, tokenName)
+    // console.log('result is', tokenData)
     console.log('result is', response, version)
     return response;
 }
@@ -121,4 +123,8 @@ export const transferTokenToDeliver = async () => {
 
 export const addVideoData = async () => {
   await addMetaDataCall(apiCaller, config.public, "videoHash", sha256(Date.now()))
+}
+
+export const checkData = async () => {
+  console.log('result is', await apiCaller.getToken(config.domainName, tokenName))
 }

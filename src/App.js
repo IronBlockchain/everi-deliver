@@ -35,17 +35,17 @@ class App extends Component {
         return (
             <div className="App">
                 <Grid container spacing={24}>
-                    <Grid item xs={8} sm={6}>
+                    <Grid item xs={4} sm={4}>
                         <Paper className={classes.paper}>
                             <Deliver history={this.props.history}/>
                         </Paper>
                     </Grid>
-                    <Grid item xs={8} sm={6}>
+                    <Grid item xs={4} sm={4}>
                         <Paper className={classes.paper}>
                             <User history={this.props.history}/>
                         </Paper>
                     </Grid>
-                  <Grid item xs={8} sm={6}>
+                  <Grid item xs={4} sm={4}>
                     <Paper className={classes.paper}>
                       <Amazon history={this.props.history}/>
                     </Paper>

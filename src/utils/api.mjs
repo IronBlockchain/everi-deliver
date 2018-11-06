@@ -1,8 +1,7 @@
 import EVT from 'evtjs'
 import config from '../config'
-import {issueToken, transferToken, destoryToken, addMetaData, createLink, createLinkQR, everiPass} from "./transfer"
+import {issueToken, transferToken, destoryToken, addMetaData, createLink, createLinkQR, everiPass} from "./transfer.mjs"
 import _ from 'lodash'
-import {createDomain} from "./domain"
 import sha256 from 'sha256'
 
 
@@ -112,7 +111,7 @@ export const transferToAmazon = async () => {
 }
 
 export const validateToken = async () => {
-  await addMetaDataCall(apiCallerAmazon, config.amazon.public, "transfer", "amazon_validated")
+  await addMetaDataCall(apiCallerAmazon, config.amazon.public, "amazon", "access token validated")
 }
 
 export const transferTokenToDeliver = async () => {
@@ -120,5 +119,6 @@ export const transferTokenToDeliver = async () => {
 }
 
 export const addVideoData = async () => {
+  await addMetaDataCall(apiCaller, config.public, "user", 'delivery confirmed');
   await addMetaDataCall(apiCaller, config.public, "videoHash", sha256(Date.now()))
 }

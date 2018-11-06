@@ -21,12 +21,14 @@ function timeout(ms) {
 const messageType = {
   user: {
     ISSUE: 'issueToken',
-    CONFIRM: 'confirm'
+    CONFIRM: 'confirm',
+    CANCEL: 'user_cancel'
   },
   shop: {
     PROVE_TOKEN: 'prove_token',
   },
   deliver: {
+    INIT_REQUEST: 'init_request',
     GENERATE_PASS: 'generate_pass',
     PASS_REQUEST: 'pass_request',
     LEAVE_ROOM: 'leave_room'
@@ -56,14 +58,22 @@ console.log('server started');
 wss.broadcast = (data) => {
   wss.clients.forEach(function each(client) {
     if (client.readyState === WebSocket.OPEN) {
-      client.send(data);
+      client.send(JSON.stringify(data));
     }
   });
 };
 
-wss.on('connection', ws => {
+wss.on('connection', async ws => {
 
-  ws.on('message', async (message) => {
+  await timeout(1000); // for test reason
+  wss.broadcast({
+    receiver: receiverGroup.ALL,
+    type: messageType.deliver.INIT_REQUEST
+  });
+
+  ws.on('message', async (rawMessage) => {
+    console.log(rawMessage);
+    const message = JSON.parse(rawMessage)
     switch (message.type) {
       case messageType.user.ISSUE:
         wss.broadcast({

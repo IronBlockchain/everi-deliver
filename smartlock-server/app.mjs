@@ -1,6 +1,6 @@
 const WebSocket = require('ws');
 import {issueTokenCall, transferToAmazon, destroyTokenCall, validateToken, transferTokenToDeliver,
-  createLinkCall, everiPassCall, addVideoData} from './src/utils/api.mjs';
+  createLinkCall, everiPassCall, addVideoData} from '../src/utils/api.mjs';
 
 const receiverType = {
   SHOP: 'shop',

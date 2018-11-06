@@ -67,8 +67,6 @@ const User = (props) => {
           </Toolbar>
         </AppBar>
         {createNotification()}
-        <Route path="/" exact component={Index}/>
-        <Route path="/about/" component={About}/>
       </div>
     </Router>
   )

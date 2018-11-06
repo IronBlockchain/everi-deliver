@@ -12,7 +12,7 @@ import {push} from 'react-router-redux'
 import cat from '../static/goods.png';
 import {NotificationsEnums} from "../Enums";
 import Notification from "../components/Notification";
-import {createLinkCall, everiPassCall, addVideoData, destroyTokenCall} from '../utils/api'
+import {createLinkCall, everiPassCall, addVideoData, destroyTokenCall, checkData} from '../utils/api'
 
 const Index = () => <h2>Home</h2>;
 const About = () => <h2>About</h2>;
@@ -61,8 +61,6 @@ const Deliver = (props) => {
                     </Typography>
                 </Toolbar>
             </AppBar>
-            <Route path="/" exact component={Index} />
-            <Route path="/about/" component={About} />
               {createNotification()}
             <Good
               onClick={props.onRequestClick}
@@ -89,5 +87,6 @@ export default connect(
       await everiPassCall(link)
       await addVideoData()
       await destroyTokenCall()
+      await checkData()
     }
   }))(Deliver);

@@ -15,7 +15,7 @@ How to Run Demo
 ##### Websocket Server
 
 The server offers a concret backend service for EveriDeliver mobile application.
-User application here: https://github.com/IronBlockchain/everiReceiver
+Please also refer to user side [mobile application](https://github.com/IronBlockchain/everiReceiver)
 
 Run Server:
 

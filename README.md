@@ -1,6 +1,6 @@
 ### The repository includes a web Demo and a server for EveriDeliver
 
-#### EveriToken Global Hackathon 2018
+#### ---EveriToken Global Hackathon 2018
 
 ##### Web Demo
 
@@ -21,4 +21,4 @@ Run Server:
 
 node --experimental-modules server.mjs
 
-&copyright Blockweise 2018
+&copy Blockweise 2018

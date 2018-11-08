@@ -21,4 +21,4 @@ Run Server:
 
 node --experimental-modules server.mjs
 
-&copy Blockweise 2018
+&copy; Blockweise 2018

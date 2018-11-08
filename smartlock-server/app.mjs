@@ -1,6 +1,6 @@
 const WebSocket = require('ws');
 import {issueTokenCall, transferToAmazon, destroyTokenCall, validateToken, transferTokenToDeliver,
-  createLinkCall, everiPassCall, addVideoData} from '../src/utils/api.mjs';
+  createLinkCall, everiPassCall, addVideoData, checkData} from '../src/utils/api.mjs';
 
 const receiverType = {
   SHOP: 'shop',
@@ -44,7 +44,7 @@ const messageType = {
   PASS_WAITING: 'pass_waiting',
   PASS_FINISHED: 'pass_success',
 
-  CONFIRM_FINISHED: 'confirm_finished',
+  ADD_HASH_FINISHED: 'confirm_finished',
   TOKEN_DESTROYED: 'token_destroyed',
 }
 
@@ -127,9 +127,11 @@ wss.on('connection', ws => {
           type: messageType.CONFIRM_FINISHED,
         })
         await destroyTokenCall()
+        const history = await checkData();
         wss.broadcast({
           receiver: receiverGroup.ALL,
           type: messageType.TOKEN_DESTROYED,
+          data: history
         })
         break;
       default:

@@ -1,7 +1,7 @@
 import WebSocket from 'ws'
 // import api from './src/utils/api';
 import {issueTokenCall, transferToAmazon, destroyTokenCall, validateToken, transferTokenToDeliver,
-  createLinkCall, everiPassCall, addVideoData} from './src/utils/api.mjs';
+  createLinkCall, everiPassCall, addVideoData, checkData, init, test} from './src/utils/api.mjs';
 
 const receiverType = {
   SHOP: 'shop',
@@ -47,7 +47,8 @@ const messageType = {
   PASS_WAITING: 'pass_waiting',
   PASS_FINISHED: 'pass_success',
 
-  CONFIRM_FINISHED: 'confirm_finished',
+  ADD_HASH_START: 'add_hash_start',
+  ADD_HASH_FINISHED: 'confirm_finished',
   TOKEN_DESTROYED: 'token_destroyed',
 }
 
@@ -65,16 +66,22 @@ wss.broadcast = (data) => {
 
 wss.on('connection', async ws => {
 
-  await timeout(1000); // for test reason
-  wss.broadcast({
-    receiver: receiverGroup.ALL,
-    type: messageType.deliver.INIT_REQUEST
-  });
+  // await timeout(1000); // for test reason
+  // wss.broadcast({
+  //   receiver: receiverGroup.ALL,
+  //   type: messageType.deliver.INIT_REQUEST
+  // });
 
   ws.on('message', async (rawMessage) => {
     console.log(rawMessage);
     const message = JSON.parse(rawMessage)
     switch (message.type) {
+      case messageType.deliver.INIT_REQUEST:
+        wss.broadcast({
+          receiver: receiverGroup.ALL,
+          type: messageType.deliver.INIT_REQUEST
+        })
+        break;
       case messageType.user.ISSUE:
         wss.broadcast({
           receiver: receiverGroup.ALL,
@@ -90,8 +97,9 @@ wss.on('connection', async ws => {
           receiver: receiverGroup.ALL,
           type: messageType.PROVE_TOKEN_WAIT,
         })
-        break;
-      case messageType.shop.PROVE_TOKEN:
+        // break;
+      // case messageType.shop.PROVE_TOKEN:
+        await timeout(3000); //here we mock the data center prove function
         await validateToken();
         wss.broadcast({
           receiver: receiverGroup.ALL,
@@ -100,7 +108,7 @@ wss.on('connection', async ws => {
         await transferTokenToDeliver()
         wss.broadcast({
           receiver: receiverGroup.ALL,
-          type: messageType.TRANSFER_DELIVER_WAIT,
+          type: messageType.TRANSFER_DELIVER_FINISH,
         })
         break;
       case messageType.deliver.GENERATE_PASS:
@@ -114,17 +122,18 @@ wss.on('connection', async ws => {
           type: messageType.GENERATE_PASS_FINISHED,
           data: link,
         })
-        break;
-      case messageType.deliver.PASS_REQUEST:
-        wss.broadcast({
-          receiver: receiverGroup.ALL,
-          type: messageType.PASS_WAITING,
-        })
-        const result = await everiPassCall(message.data)
+      //   break;
+      // case messageType.deliver.PASS_REQUEST:
+        await timeout(10000)
+      //   wss.broadcast({
+      //     receiver: receiverGroup.ALL,
+      //     type: messageType.PASS_WAITING,
+      //   })
+      //   const result = await everiPassCall(message.data)
+      //   const result = await everiPassCall(link)
         wss.broadcast({
           receiver: receiverGroup.ALL,
           type: messageType.PASS_FINISHED,
-          data: result
         })
         break;
       case messageType.deliver.LEAVE_ROOM:
@@ -134,21 +143,30 @@ wss.on('connection', async ws => {
         })
         break;
       case messageType.user.CONFIRM:
-        await addVideoData()
         wss.broadcast({
           receiver: receiverGroup.ALL,
-          type: messageType.CONFIRM_FINISHED,
+          type: messageType.ADD_HASH_START,
+        })
+        const hash = await addVideoData()
+        wss.broadcast({
+          receiver: receiverGroup.ALL,
+          type: messageType.ADD_HASH_FINISHED,
+          hash: hash
         })
         await destroyTokenCall()
+        const history = await checkData()
+        timeout(2000)
         wss.broadcast({
           receiver: receiverGroup.ALL,
           type: messageType.TOKEN_DESTROYED,
+          data: history,
         })
+
         break;
       default:
         console.log('unknown message', message);
         return;
     }
-    console.log(`Received message => ${message}`)
+    console.log(`Received message => ${message.toString()}`)
   })
 })

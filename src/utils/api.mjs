@@ -1,6 +1,6 @@
 import EVT from 'evtjs'
 import config from '../config'
-import {issueToken, transferToken, destoryToken, addMetaData, createLink, createLinkQR, everiPass} from "./transfer.mjs"
+import {issueToken, transferToken, destroyToken, addMetaData, createLink, createLinkQR, everiPass} from "./transfer.mjs"
 import _ from 'lodash'
 import sha256 from 'sha256'
 
@@ -16,7 +16,8 @@ const apiCaller = EVT({
     // keyProvider should be string of private key (aka. wit, can generate from everiSigner)
     // you can also pass a function that return that string (or even Promise<string> for a async function)
     endpoint: network,
-    keyProvider: config.private
+    keyProvider: config.private,
+    networkTimeout: config.timeout
 });
 
 const apiCallerAmazon = EVT({
@@ -35,21 +36,21 @@ export async function init () {
     // const domainCreateResult = await createDomain(EVT, apiCaller, config.public, config.domainName)
     // console.log(domainCreateResult);
 
-    // await issueTokenCall();
-    //
-    // await transferTokenCall(apiCaller, config.public, config.amazon.public);
-    //
-    // await addMetaDataCall(apiCallerAmazon, config.amazon.public, "transfer", "amazon_validated")
-    //
-    // await transferTokenCall(apiCallerAmazon, config.amazon.public, config.deliver.public);
-    //
-    // const link = await createLinkCall()
-    //
-    // await everiPassCall(link)
-    //
-    // await addMetaDataCall(apiCaller, config.public, "videoHash", sha256(Date.now()))
-    //
-    // await destroyTokenCall()
+    await issueTokenCall();
+
+    await transferTokenCall(apiCaller, config.public, config.amazon.public);
+
+    await addMetaDataCall(apiCallerAmazon, config.amazon.public, "transfer", "amazon_validated")
+
+    await transferTokenCall(apiCallerAmazon, config.amazon.public, config.deliver.public);
+
+    const link = await createLinkCall()
+
+    await everiPassCall(link)
+
+    await addMetaDataCall(apiCaller, config.public, "videoHash", sha256(Date.now().toString()))
+
+    await destroyTokenCall()
 
     const tokens = await apiCaller.getFungibleBalance(config.public);
     console.log('fungible balances are', tokens)
@@ -72,7 +73,7 @@ const transferTokenCall = async (caller, sender, receiver) => {
 }
 
 export const destroyTokenCall = async () => {
-    const result = await destoryToken(EVT, apiCaller, config.public, config.domainName, tokenName)
+    const result = await destroyToken(EVT, apiCaller, config.public, config.domainName, tokenName)
     console.log('destroy token result is', result)
     return result;
 }
@@ -85,13 +86,13 @@ const addMetaDataCall = async (apiCaller, sender, key, value) => {
 }
 
 export const createLinkCall = async () => {
-    const link = await createLink(EVT, config.amazon.private, config.domainName, tokenName)
+    const link = await createLink(EVT, config.private, config.domainName, tokenName)
     console.log('generate link  is', link)
     return link.rawText
 }
 
 const createLinkQRCall = async () => {
-    const data = await createLink(EVT, config.amazon.public, config.domainName, tokenName)
+    const data = await createLink(EVT, config.amazon.private, config.domainName, tokenName)
     console.log('generate link  is', data)
     return data.url
 }
@@ -121,10 +122,23 @@ export const transferTokenToDeliver = async () => {
 }
 
 export const addVideoData = async () => {
+  const hash = sha256(Date.now().toString());
   await addMetaDataCall(apiCaller, config.public, "user", 'delivery confirmed');
-  await addMetaDataCall(apiCaller, config.public, "videoHash", sha256(Date.now()))
+  await addMetaDataCall(apiCaller, config.public, "videoHash", hash)
+  return hash
 }
 
 export const checkData = async () => {
-  console.log('result is', await apiCaller.getToken(config.domainName, tokenName))
+  const result = await apiCaller.getToken(config.domainName, tokenName)
+  console.log('token history:', result)
+  return result;
 }
+
+export const test = async() => {
+  await issueTokenCall();
+  await transferTokenCall(apiCaller, config.public, config.amazon.public);
+
+  await addMetaDataCall(apiCallerAmazon, config.amazon.public, "transfer", "amazon_validated")
+  await checkData();
+}
+

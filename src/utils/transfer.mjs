@@ -23,16 +23,16 @@ export const issueToken = async (EVT, apiCaller, publicKey, domainName, tokenNam
     );
 }
 
-export const destoryToken = async (EVT, apiCaller, publicKey, domainName, tokenName) => {
-    return await apiCaller.pushTransaction(
-        { maxCharge: 10000, payer: publicKey },
-        new EVT.EvtAction(config.actionName.DESTROY_TOKEN, {
-            "domain": domainName,
-            "name": tokenName,
-        })
-    );
-}
 
+export const destroyToken = async (EVT, apiCaller, publicKey, domainName, tokenName) => {
+  return await apiCaller.pushTransaction(
+    { maxCharge: 10000, payer: publicKey },
+    new EVT.EvtAction(config.actionName.DESTROY_TOKEN, {
+      "domain": domainName,
+      "name": tokenName,
+    })
+  );
+}
 export const addMetaData = async (EVT, apiCaller, publicKey, domainName, tokenName, key, value) => {
     return await apiCaller.pushTransaction(
         { maxCharge: 10000, payer: publicKey },
@@ -45,7 +45,7 @@ export const addMetaData = async (EVT, apiCaller, publicKey, domainName, tokenNa
 
 export const everiPass = async (EVT, apiCaller, publicKey,link) => {
     return await apiCaller.pushTransaction(
-        { maxCharge: 10000, payer: publicKey },
+        { maxCharge: 100000 },
         new EVT.EvtAction(config.actionName.EVERI_PASS, {
             link
         })
@@ -75,10 +75,13 @@ export const createLinkQR = async (EVT, publicKey, domainName, tokenName) => {
 }
 
 export const createLink = async (EVT, privateKey, domainName, tokenName) => {
+  const linkId = await EVT.EvtLink.getUniqueLinkId();
+  console.log('linkId is', linkId);
     return await EVT.EvtLink.getEvtLinkForEveriPass({
-        domainName,
-        tokenName,
-        autoDestroying: false,
-        keyProvider: [privateKey]
+      domainName,
+      tokenName,
+      autoDestroying: true,
+      keyProvider: [privateKey],
+      linkId
     })
 }

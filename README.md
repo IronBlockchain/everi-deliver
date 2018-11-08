@@ -19,6 +19,6 @@ User application here: https://github.com/IronBlockchain/everiReceiver
 
 Run Server:
 
-node --experimental-modules server.mjs
+`node --experimental-modules server.mjs`
 
 &copy; Blockweise 2018
